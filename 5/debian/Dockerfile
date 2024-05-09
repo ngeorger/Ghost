@@ -1,6 +1,6 @@
 # https://docs.ghost.org/faq/node-versions/
 # https://github.com/nodejs/Release (looking for "LTS")
-FROM node:iron-bookworm-slim
+FROM node:iron-bookworm
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
@@ -37,7 +37,8 @@ ENV NODE_ENV production
 
 ENV GHOST_CLI_VERSION 1.26.0
 RUN set -eux; \
-	npm install -g "ghost-cli@$GHOST_CLI_VERSION"; \
+#	npm install -g "ghost-cli@$GHOST_CLI_VERSION"; \
+	yarn global add "ghost-cli@$GHOST_CLI_VERSION"; \
 	npm cache clean --force
 
 ENV GHOST_INSTALL /var/lib/ghost
@@ -56,7 +57,7 @@ RUN set -eux; \
 	if ! eval "$installCmd"; then \
 		aptPurge=1; \
 		apt update; \
-		apt install -y --no-install-recommends --no-install-suggests libvips-dev g++ make python3 ; \
+		apt install -y --no-install-recommends --no-install-suggests libvips-dev; \
 		eval "$installCmd"; \
 	fi; \
 	\
